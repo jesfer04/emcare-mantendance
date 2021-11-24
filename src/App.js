@@ -1,23 +1,35 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { Fragment, useEffect } from "react";
+import "primereact/resources/themes/lara-light-indigo/theme.css";
+import "primereact/resources/primereact.min.css";
+import "primeicons/primeicons.css";
+import { Routes, Route, useNavigate } from "react-router-dom";
+import Dashboard from "./components/Dashboard";
+import { Login } from "./components/Login";
+import Students from "./components/Students";
+import Home from "./components/Home";
+import Student from "./components/Student";
 
 function App() {
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (!localStorage.getItem("session")) {
+      navigate("/login");
+    }
+  }, [navigate]);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      <Routes>
+        <Route path="/login" element={<Login />} />
+        <Route path="/" element={<Dashboard />}>
+          <Route index element={<Home />} />
+          <Route path="/estudiantes" element={<Students />}/>
+          <Route path="/estudiante" element={<Student />}>
+            <Route path=":estudianteId" element={<Student />}/>
+          </Route> 
+        </Route>
+      </Routes>
     </div>
   );
 }
